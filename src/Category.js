@@ -166,19 +166,8 @@ export default function Category() {
   const handleDeleteClick = (id) => {
     console.log('handleDeleteClick in Category', id)
     if (window.confirm("Are you sure to delete this Category?")) {
-      const toBeSetName = {
-        category: { name: 'Uncategorize', id: 99 },
-      }
-      moneyRef.where("categoryId", '==', id).get().then(response => {
-        let batch = firebase.firestore().batch()
-        response.docs.forEach((doc) => {
-          const docRef = firebase.firestore().collection('money').doc(doc.id)
-          batch.update(docRef, toBeSetName)
-        })
-        batch.commit().then(() => {
-          console.log('The category was deleted')
-        })
-      })
+      categoryRef.doc(id).delete();
+      console.log("the category was deleted")
     }
 
     // if (window.confirm("Are you sure to delete this Category?"))
@@ -303,7 +292,7 @@ export default function Category() {
     return (
       <tr>
         <td>
-          <BsTrash onClick={() => props.onDeleteClick(d.category.id)} />
+          <BsTrash onClick={() => props.onDeleteClick(d.id)} />
           <BsPencil onClick={() => props.onEditClick(d)} />
         </td>
         <td>{d.catId}</td>
